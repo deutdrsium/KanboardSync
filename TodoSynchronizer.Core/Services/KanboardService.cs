@@ -51,7 +51,7 @@ namespace TodoSynchronizer.Core.Services
         {
             try
             {
-                Call<object>("getMe", new { });
+                Call<string>("getVersion", new { });
                 return new CommonResult(true, "连接成功");
             }
             catch (Exception ex)
