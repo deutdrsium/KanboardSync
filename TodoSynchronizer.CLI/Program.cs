@@ -16,6 +16,7 @@ class Program
     {
         string canvastoken = "", graphtokenpath = "", didacredentialfile = "";
         string configpath = "", graphtokenkey = "", offlinetokenfile = "";
+        string kanboardurl = "", kanboardtoken = "";
         bool local = false;
         OfflineTokenDto offlineToken = null;
         DidaCredential didaCredential = null;
@@ -37,6 +38,12 @@ class Program
             if (args[i] == "-didacredentialfile")
                 if (i + 1 < args.Length)
                     didacredentialfile = args[i + 1].Trim();
+            if (args[i] == "-kanboardurl")
+                if (i + 1 < args.Length)
+                    kanboardurl = args[i + 1].Trim();
+            if (args[i] == "-kanboardtoken")
+                if (i + 1 < args.Length)
+                    kanboardtoken = args[i + 1].Trim();
             if (args[i] == "-local")
                 local = true;
         }
@@ -52,7 +59,20 @@ class Program
                 Log("未指定 Canvas Token！");
                 Environment.Exit(-1);
             }
-            if (didacredentialfile == "")
+            if (kanboardurl != "" || kanboardtoken != "")
+            {
+                if (kanboardurl == "")
+                {
+                    Log("未指定 Kanboard URL！");
+                    Environment.Exit(-1);
+                }
+                if (kanboardtoken == "")
+                {
+                    Log("未指定 Kanboard API Token！");
+                    Environment.Exit(-1);
+                }
+            }
+            else if (didacredentialfile == "")
             {
                 if (graphtokenpath == "")
                 {
@@ -83,26 +103,46 @@ class Program
             offlinetokenfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"token.json");
             offlineToken = JsonConvert.DeserializeObject<OfflineTokenDto>(File.ReadAllText(offlinetokenfile));
             canvastoken = offlineToken.CanvasToken;
-            didaCredential = offlineToken.DidaCredential;
+            if (offlineToken.KanboardCredential != null)
+            {
+                kanboardurl = offlineToken.KanboardCredential.Url;
+                kanboardtoken = offlineToken.KanboardCredential.ApiToken;
+            }
+            else
+            {
+                didaCredential = offlineToken.DidaCredential;
+            }
         }
 
         ReadConfig(configpath);
 
         CanvasLogin(canvastoken);
 
-        if (didacredentialfile == "")
+        if (kanboardurl != "")
         {
-            GraphLogin(graphtokenpath, graphtokenkey, offlinetokenfile, offlineToken);
+            Log($"Kanboard URL: {kanboardurl}");
+            // TODO: 实现 KanboardSyncService 后取消注释以下代码
+            // KanboardService.Init(kanboardurl, kanboardtoken);
+            // Log("Kanboard 认证成功");
+            // KanboardSyncService sync = new KanboardSyncService();
+            // sync.OnReportProgress += OnReportProgress;
+            // sync.Go();
+            Log("Kanboard 同步服务尚未完成，请等待后续版本。");
+            Environment.Exit(0);
+        }
+        else if (didaCredential != null)
+        {
+            DidaLogin(didaCredential);
 
-            SyncService sync = new SyncService();
+            DidaSyncService sync = new DidaSyncService();
             sync.OnReportProgress += OnReportProgress;
             sync.Go();
         }
         else
         {
-            DidaLogin(didaCredential);
+            GraphLogin(graphtokenpath, graphtokenkey, offlinetokenfile, offlineToken);
 
-            DidaSyncService sync = new DidaSyncService();
+            SyncService sync = new SyncService();
             sync.OnReportProgress += OnReportProgress;
             sync.Go();
         }

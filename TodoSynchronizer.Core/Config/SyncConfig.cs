@@ -7,10 +7,34 @@ using TodoSynchronizer.Core.Models.CanvasModels;
 
 namespace TodoSynchronizer.Core.Config
 {
+    public enum TargetService
+    {
+        MicrosoftTodo, TickTick, Kanboard
+    }
+
+    public class KanboardConfig
+    {
+        public string Url { get; set; }
+        public string ApiToken { get; set; }
+        /// <summary>The Kanboard project id to sync tasks into.</summary>
+        public int ProjectId { get; set; }
+        /// <summary>Column id to place new tasks in. 0 = first column of the project.</summary>
+        public int DefaultColumnId { get; set; }
+        public string AssignmentCategoryName { get; set; }
+        public string QuizCategoryName { get; set; }
+        public string DiscussionCategoryName { get; set; }
+        public string AnouncementCategoryName { get; set; }
+        public string NotificationCategoryName { get; set; }
+    }
+
     public class SyncConfig
     {
         //Static
         public static SyncConfig Default { get; set; }
+
+        //Target Service
+        public TargetService TargetService { get; set; }
+
         //List Names
         public ListNameMode ListNameMode { get; set; }
         public ListNamesForCategory ListNamesForCategory { get; set; }
@@ -36,6 +60,9 @@ namespace TodoSynchronizer.Core.Config
 
         //Notification
         public NotificationConfig NotificationConfig { get; set; }
+
+        //Kanboard
+        public KanboardConfig KanboardConfig { get; set; }
     }
 
     public class ListNamesForCategory
