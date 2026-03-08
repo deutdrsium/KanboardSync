@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -40,11 +41,18 @@ namespace TodoSynchronizer.Core.Services
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"HTTP {(int)response.StatusCode}: {text}");
 
-            var wrapper = JsonConvert.DeserializeObject<RpcResponse<T>>(text);
+            var wrapper = JsonConvert.DeserializeObject<RpcResponse<JToken>>(text);
             if (wrapper.Error != null)
                 throw new Exception($"Kanboard RPC [{wrapper.Error.Code}]: {wrapper.Error.Message}");
 
-            return wrapper.Result;
+            // Kanboard returns boolean false instead of an error when an operation fails
+            if (wrapper.Result is JValue jv && jv.Type == JTokenType.Boolean && !(bool)jv.Value)
+                throw new Exception($"Kanboard method '{method}' returned false (operation failed)");
+
+            if (wrapper.Result == null)
+                return default;
+
+            return wrapper.Result.ToObject<T>();
         }
 
         public static CommonResult TestConnection()
@@ -85,7 +93,8 @@ namespace TodoSynchronizer.Core.Services
                 title = t.Title,
                 project_id = t.ProjectId,
                 description = t.Description,
-                date_due = t.DateDue > 0 ? t.DateDue.ToString() : null,
+                // date_due must be an integer Unix timestamp, NOT a string
+                date_due = t.DateDue > 0 ? (object)t.DateDue : null,
                 column_id = t.ColumnId > 0 ? (object)t.ColumnId : null,
                 category_id = t.CategoryId > 0 ? (object)t.CategoryId : null,
                 color_id = string.IsNullOrEmpty(t.ColorId) ? null : t.ColorId,
@@ -98,7 +107,8 @@ namespace TodoSynchronizer.Core.Services
                 id = t.Id,
                 title = t.Title,
                 description = t.Description,
-                date_due = t.DateDue > 0 ? t.DateDue.ToString() : null,
+                // date_due must be an integer Unix timestamp, NOT a string
+                date_due = t.DateDue > 0 ? (object)t.DateDue : null,
                 color_id = string.IsNullOrEmpty(t.ColorId) ? null : t.ColorId,
                 reference = t.Reference
             });
