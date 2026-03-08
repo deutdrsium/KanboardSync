@@ -62,20 +62,19 @@ namespace TodoSynchronizer.Core.Services
 
         /// <summary>Get all active (open) tasks in a project.</summary>
         public static List<KanboardTask> GetAllActiveTasks(int projectId)
-            => Call<List<KanboardTask>>("getAllTasksByProject", new { project_id = projectId })
+            => Call<List<KanboardTask>>("getAllTasks", new { project_id = projectId, status_id = 1 })
                ?? new List<KanboardTask>();
 
-        /// <summary>Get closed tasks in a project (up to 9999).</summary>
+        /// <summary>Get closed tasks in a project.</summary>
         public static List<KanboardTask> GetClosedTasks(int projectId)
         {
             try
             {
-                return Call<List<KanboardTask>>("searchTasks", new { project_id = projectId, query = "status:closed" })
+                return Call<List<KanboardTask>>("getAllTasks", new { project_id = projectId, status_id = 0 })
                        ?? new List<KanboardTask>();
             }
             catch
             {
-                // Graceful fallback: if search API fails, return empty (open tasks still work)
                 return new List<KanboardTask>();
             }
         }
