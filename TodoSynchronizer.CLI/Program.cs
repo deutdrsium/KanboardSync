@@ -120,15 +120,11 @@ class Program
 
         if (kanboardurl != "")
         {
-            Log($"Kanboard URL: {kanboardurl}");
-            // TODO: 实现 KanboardSyncService 后取消注释以下代码
-            // KanboardService.Init(kanboardurl, kanboardtoken);
-            // Log("Kanboard 认证成功");
-            // KanboardSyncService sync = new KanboardSyncService();
-            // sync.OnReportProgress += OnReportProgress;
-            // sync.Go();
-            Log("Kanboard 同步服务尚未完成，请等待后续版本。");
-            Environment.Exit(0);
+            KanboardLogin(kanboardurl, kanboardtoken);
+
+            KanboardSyncService sync = new KanboardSyncService();
+            sync.OnReportProgress += OnReportProgress;
+            sync.Go();
         }
         else if (didaCredential != null)
         {
@@ -145,6 +141,28 @@ class Program
             SyncService sync = new SyncService();
             sync.OnReportProgress += OnReportProgress;
             sync.Go();
+        }
+    }
+
+    private static void KanboardLogin(string url, string token)
+    {
+        try
+        {
+            KanboardService.Init(url, token);
+            var res = KanboardService.TestConnection();
+            if (!res.success)
+            {
+                Log("Kanboard 认证失败！");
+                Log(res.result);
+                Environment.Exit(-1);
+            }
+            Log("Kanboard 认证成功");
+        }
+        catch (Exception ex)
+        {
+            Log("Kanboard 认证失败！");
+            Log(ex.ToString());
+            Environment.Exit(-1);
         }
     }
 
