@@ -7,7 +7,7 @@
 # Course 表示按课程创建列表
 # 同步目标服务
 # 可选值: MicrosoftTodo | TickTick | Kanboard
-TargetService : MicrosoftTodo
+TargetService : Kanboard
 ListNameMode : Category
 # 若 ListNameMode 为 Course，则可指定创建 Todo 列表的模板
 # 可用的替换参数：
@@ -258,14 +258,14 @@ NotificationConfig :
 # Kanboard 配置（仅当 TargetService 为 Kanboard 时生效）
 KanboardConfig :
   # 你的 Kanboard 实例地址（末尾不带斜杠）
-  Url : "http://kanboard.example.com"
+  Url : "https://kb.xuefz.cn/"
   # Kanboard JSON-RPC API Token
   # 在 Kanboard 中：设置 → API → 复制 API Token
-  ApiToken : "your-api-token-here"
+  ApiToken : "c0af7c6fc86279c637d0aad1d22fef92349a1e73ac34fbb930cc4e87e23f"
   # 同步目标项目的 ID（在项目设置页面可以找到）
   ProjectId : 1
   # 新任务放置的列 ID（0 表示自动使用项目的第一列）
-  DefaultColumnId : 0
+  DefaultColumnId : 1
   # 四类 Canvas 内容在 Kanboard 中对应的分类名称
   # 若分类不存在则由同步程序自动创建
   AssignmentCategoryName : "Canvas 作业"

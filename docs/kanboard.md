@@ -141,19 +141,9 @@
     | `KANBOARD_URL` | 你的 Kanboard 地址（如 `http://your-server`） |
     | `KANBOARD_TOKEN` | 第六步获取的 Kanboard API Token |
 
-19. 编辑仓库根目录下 `.github/workflows/` 中的工作流文件，在 Run 步骤中修改调用参数为：
+19. 仓库中已包含专用的工作流文件 `.github/workflows/linux-kanboard.yml`，无需修改，直接使用即可。若其他工作流（`linux.yml` 同步到 MS Todo、`linux-dida.yml` 同步到滴答清单）不需要，可在 Actions 页面将其禁用。
 
-    ```yaml
-    - name: Run
-      run: |
-        ./TodoSynchronizer.CLI \
-          -canvastoken "${{ secrets.CANVAS_TOKEN }}" \
-          -configfile config.yaml \
-          -kanboardurl "${{ secrets.KANBOARD_URL }}" \
-          -kanboardtoken "${{ secrets.KANBOARD_TOKEN }}"
-    ```
-
-20. 在 Actions 页面手动触发一次，检查输出是否成功
+20. 在 Actions 页面左侧选择"**同步到 Kanboard**"，右侧点击"Run workflow"手动触发一次，检查输出是否成功
 
 ---
 
