@@ -93,8 +93,7 @@ namespace TodoSynchronizer.Core.Services
                 title = t.Title,
                 project_id = t.ProjectId,
                 description = t.Description,
-                // date_due must be an integer Unix timestamp, NOT a string
-                date_due = t.DateDue > 0 ? (object)t.DateDue : null,
+                date_due = UnixToDateString(t.DateDue),
                 column_id = t.ColumnId > 0 ? (object)t.ColumnId : null,
                 category_id = t.CategoryId > 0 ? (object)t.CategoryId : null,
                 color_id = string.IsNullOrEmpty(t.ColorId) ? null : t.ColorId,
@@ -107,11 +106,16 @@ namespace TodoSynchronizer.Core.Services
                 id = t.Id,
                 title = t.Title,
                 description = t.Description,
-                // date_due must be an integer Unix timestamp, NOT a string
-                date_due = t.DateDue > 0 ? (object)t.DateDue : null,
+                date_due = UnixToDateString(t.DateDue),
                 color_id = string.IsNullOrEmpty(t.ColorId) ? null : t.ColorId,
                 reference = t.Reference
             });
+
+        /// <summary>Convert Unix timestamp to ISO date string (yyyy-MM-dd HH:mm) for Kanboard input. Returns null if 0.</summary>
+        private static string UnixToDateString(long unixTimestamp)
+            => unixTimestamp > 0
+                ? DateTimeOffset.FromUnixTimeSeconds(unixTimestamp).UtcDateTime.ToString("yyyy-MM-dd HH:mm")
+                : null;
 
         public static List<KanboardCategory> GetAllCategories(int projectId)
             => Call<List<KanboardCategory>>("getAllCategories", new { project_id = projectId })
