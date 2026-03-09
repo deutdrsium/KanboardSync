@@ -265,7 +265,7 @@ KanboardConfig :
   # 同步目标项目的 ID（在项目设置页面可以找到）
   ProjectId : 1
   # 新任务放置的列 ID（0 表示自动使用项目的第一列）
-  DefaultColumnId : 1
+  DefaultColumnId : 2
   # 四类 Canvas 内容在 Kanboard 中对应的分类名称
   # 若分类不存在则由同步程序自动创建
   AssignmentCategoryName : "Canvas 作业"
