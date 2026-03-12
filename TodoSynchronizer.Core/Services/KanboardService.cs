@@ -95,6 +95,7 @@ namespace TodoSynchronizer.Core.Services
                 description = t.Description,
                 date_due = UnixToDateString(t.DateDue),
                 column_id = t.ColumnId > 0 ? (object)t.ColumnId : null,
+                swimlane_id = t.SwimlaneId > 0 ? (object)t.SwimlaneId : null,
                 category_id = t.CategoryId > 0 ? (object)t.CategoryId : null,
                 color_id = string.IsNullOrEmpty(t.ColorId) ? null : t.ColorId,
                 reference = t.Reference

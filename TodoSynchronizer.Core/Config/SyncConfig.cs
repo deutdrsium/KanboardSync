@@ -20,6 +20,8 @@ namespace TodoSynchronizer.Core.Config
         public int ProjectId { get; set; }
         /// <summary>Column id to place new tasks in. 0 = first column of the project.</summary>
         public int DefaultColumnId { get; set; }
+        /// <summary>Swimlane id to place new tasks in. 0 = default swimlane.</summary>
+        public int DefaultSwimlaneId { get; set; }
         public string AssignmentCategoryName { get; set; }
         public string QuizCategoryName { get; set; }
         public string DiscussionCategoryName { get; set; }

@@ -30,6 +30,9 @@ namespace TodoSynchronizer.Core.Models.KanboardModels
         [JsonProperty("column_id")]
         public int ColumnId { get; set; }
 
+        [JsonProperty("swimlane_id")]
+        public int SwimlaneId { get; set; }
+
         /// <summary>Category id; 0 means no category.</summary>
         [JsonProperty("category_id")]
         public int CategoryId { get; set; }

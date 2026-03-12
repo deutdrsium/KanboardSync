@@ -265,7 +265,11 @@ KanboardConfig :
   # 同步目标项目的 ID（在项目设置页面可以找到）
   ProjectId : 1
   # 新任务放置的列 ID（0 表示自动使用项目的第一列）
-  DefaultColumnId : 2
+  DefaultColumnId : 0
+  # 新任务放置的泳道 ID（0 表示使用项目的默认泳道）
+  # 查看泳道 ID：在 Kanboard 项目设置 → 泳道 页面，
+  # 或通过 API 调用 getActiveSwimlanes 获取
+  DefaultSwimlaneId : 4
   # 四类 Canvas 内容在 Kanboard 中对应的分类名称
   # 若分类不存在则由同步程序自动创建
   AssignmentCategoryName : "Canvas 作业"

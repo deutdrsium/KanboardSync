@@ -20,6 +20,7 @@ namespace TodoSynchronizer.Core.Services
         public List<KanboardTask> canvasTasks = null;
         public List<Course> courses = null;
         public int defaultColumnId = 0;
+        public int defaultSwimlaneId = 0;
         public int CourseCount, ItemCount, UpdateCount, FailedCount;
 
         private string message;
@@ -74,6 +75,8 @@ namespace TodoSynchronizer.Core.Services
                 defaultColumnId = kb.DefaultColumnId > 0
                     ? kb.DefaultColumnId
                     : KanboardService.GetFirstColumnId(kb.ProjectId);
+
+                defaultSwimlaneId = kb.DefaultSwimlaneId;
 
                 var existingCategories = KanboardService.GetAllCategories(kb.ProjectId);
                 dicCategoryId = new Dictionary<string, int>();
@@ -399,6 +402,7 @@ namespace TodoSynchronizer.Core.Services
                 Id = 0,
                 ProjectId = kb.ProjectId,
                 ColumnId = defaultColumnId,
+                SwimlaneId = defaultSwimlaneId,
                 CategoryId = catId,
                 Reference = refKey
             };
